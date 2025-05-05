@@ -1,8 +1,7 @@
-import { defineConfig } from 'vite'
-import preact from '@preact/preset-vite'
+import { defineConfig } from 'vite';
+import preact from '@preact/preset-vite';
 import { VitePWA } from 'vite-plugin-pwa';
 
-// https://vite.dev/config/
 export default defineConfig({
   plugins: [
     preact(),
@@ -23,7 +22,28 @@ export default defineConfig({
             type: 'image/svg+xml',
           }
         ]
+      },
+      workbox: {
+        globPatterns: ['**/*.{js,css,html,ico,png,svg}'],
+        runtimeCaching: [
+          {
+            urlPattern: /^https:\/\/api-game\.bloque\.app\/game\/leaderboard/,
+            handler: 'NetworkFirst',
+            options: {
+              cacheName: 'leaderboard-cache',
+              expiration: { maxEntries: 50 },
+            },
+          },
+          {
+            urlPattern: /^https:\/\/api-game\.bloque\.app\/game\/market/,
+            handler: 'NetworkFirst',
+            options: {
+              cacheName: 'market-cache',
+              expiration: { maxEntries: 50 },
+            },
+          }
+        ]
       }
-    })
-  ],
-})
+    }),
+  ]
+});
